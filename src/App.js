@@ -6,11 +6,11 @@ import Navbar from './Pages/Shared/Navbar/Navbar';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="about" element={<About />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </div>
   );
