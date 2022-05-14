@@ -33,7 +33,6 @@ const Login = () => {
         navigate(from, { replace: true });
     }
 
-
     const onSubmit = data => {
         console.log(data)
         signInWithEmailAndPassword(data.email, data.password)
@@ -67,7 +66,6 @@ const Login = () => {
                             <label className="label">
                                 {errors.email?.type === 'required' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}
                                 {errors.email?.type === 'pattern' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}
-
                             </label>
                         </div>
                         <div className="form-control w-full max-w-xs">
@@ -89,11 +87,13 @@ const Login = () => {
                                     }
                                 })}
                             />
+                            <p className='btn btn-link capitalize '><small>Forgot Password?</small></p>
                             <label className="label">
                                 {errors.password?.type === 'required' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
                                 {errors.password?.type === 'minLength' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
-
                             </label>
+
+
                         </div>
                         {signInError}
                         <input className='btn w-full max-w-xs' type="submit" value='Login' />
