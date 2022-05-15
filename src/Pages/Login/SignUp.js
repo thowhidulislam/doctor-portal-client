@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import { useForm } from "react-hook-form";
 import Loading from '../Shared/Loading/Loading';
 import { Link, useNavigate } from 'react-router-dom';
+import useToken from '../../hooks/useToken';
 
 const SignUp = () => {
     const navigate = useNavigate()
+    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
     const [
         createUserWithEmailAndPassword,
         user,
@@ -16,20 +18,22 @@ const SignUp = () => {
     const [updateProfile, updating, updateError] = useUpdateProfile(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
 
+    const [token] = useToken(user || gUser)
+    useEffect(() => {
+        if (token) {
+            navigate('/appointment')
+        }
+    }, [token, navigate])
+
     let signInError;
 
-    if (error || updateError) {
+    if (error || updateError || gError) {
         signInError = <p className='text-red-500'><small>{error?.message || updateError?.message}</small></p>
     }
 
-    if (loading || updating) {
+    if (loading || updating || gLoading) {
         return <Loading></Loading>
     }
-
-    if (user) {
-        navigate('/appointment')
-    }
-
 
     const onSubmit = async data => {
         console.log(data)
@@ -116,7 +120,7 @@ const SignUp = () => {
                     </form>
                     <p><small>Already have an account? <Link className='text-primary' to='/login'>Please login</Link></small></p>
                     <div className="divider" > OR</div >
-                    <button onClick={() => createUserWithEmailAndPassword()} className="btn btn-outline">Continue with Google</button>
+                    <button onClick={() => signInWithGoogle()} className="btn btn-outline">Continue with Google</button>
                 </div >
             </div >
         </div >
